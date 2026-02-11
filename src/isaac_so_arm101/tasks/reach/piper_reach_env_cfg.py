@@ -78,9 +78,9 @@ class CommandsCfg:
         resampling_time_range=(5.0, 5.0),
         debug_vis=True,
         ranges=mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(0.2, 0.3),
+            pos_x=(0.3, 0.4),
             pos_y=(0.1, 0.15),
-            pos_z=(0.1, 0.2),
+            pos_z=(0.3, 0.3),
             roll=(0.0, 0.0),
             pitch=(90.0,90.0),
             yaw=(0.0, 0.0),
@@ -126,7 +126,7 @@ class EventCfg:
         func=mdp.reset_joints_by_scale,
         mode="reset",
         params={
-            "position_range": (0.5, 1.5),
+            "position_range": (0.0, 0.0),
             "velocity_range": (0.0, 0.0),
         },
     )
@@ -136,15 +136,26 @@ class EventCfg:
 class RewardsCfg:
     """Reward terms for the MDP."""
 
-    # task terms
     end_effector_position_tracking = RewTerm(
-        func=mdp.position_command_error,
-        weight=-0.2,
-        params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
+        func=mdp.position_command_error_tanh, # 改用 tanh 或 exp
+        weight=0.5, # 给一个显著的正权重
+        params={
+            "asset_cfg": SceneEntityCfg("robot", body_names=["link6"]), 
+            "std": 0.5, # 增大初始感知的半径，让它在半米外就能拿到分
+            "command_name": "ee_pose"
+        },
     )
+
+    # task terms
+    # end_effector_position_tracking = RewTerm(
+    #     func=mdp.position_command_error,
+    #     weight=-0.2,
+    #     params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
+    # )
+
     end_effector_position_tracking_fine_grained = RewTerm(
         func=mdp.position_command_error_tanh,
-        weight=0.1,
+        weight=0.2,
         params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.1, "command_name": "ee_pose"},
     )
     end_effector_orientation_tracking = RewTerm(
@@ -208,7 +219,7 @@ class PiperReachEnvCfg(ManagerBasedRLEnvCfg):
         # general settings
         self.decimation = 1
         self.sim.render_interval = self.decimation
-        self.episode_length_s = 12.0
+        self.episode_length_s = 6.0
         self.viewer.eye = (2.5, 2.5, 1.5)
         # simulation settings
         self.sim.dt = 1.0 / 60.0
