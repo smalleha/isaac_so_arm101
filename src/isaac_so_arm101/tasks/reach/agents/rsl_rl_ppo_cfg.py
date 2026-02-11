@@ -27,8 +27,8 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     empirical_normalization = False
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
-        actor_hidden_dims=[64, 64],
-        critic_hidden_dims=[64, 64],
+        actor_hidden_dims=[128, 128],
+        critic_hidden_dims=[128, 128],
         activation="elu",
     )
     algorithm = RslRlPpoAlgorithmCfg(

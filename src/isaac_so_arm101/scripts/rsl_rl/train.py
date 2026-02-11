@@ -214,6 +214,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
 if __name__ == "__main__":
     # run the main function
+    print("start train!!!!!!")
     main()
     # close sim app
     simulation_app.close()

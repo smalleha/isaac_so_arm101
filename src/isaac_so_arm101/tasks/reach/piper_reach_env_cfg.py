@@ -78,11 +78,11 @@ class CommandsCfg:
         resampling_time_range=(5.0, 5.0),
         debug_vis=True,
         ranges=mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(-0.1, 0.1),
-            pos_y=(-0.25, -0.1),
-            pos_z=(0.1, 0.3),
+            pos_x=(0.2, 0.3),
+            pos_y=(0.1, 0.15),
+            pos_z=(0.1, 0.2),
             roll=(0.0, 0.0),
-            pitch=(0.0, 0.0),
+            pitch=(90.0,90.0),
             yaw=(0.0, 0.0),
         ),
     )
@@ -206,7 +206,7 @@ class PiperReachEnvCfg(ManagerBasedRLEnvCfg):
     def __post_init__(self):
         """Post initialization."""
         # general settings
-        self.decimation = 2
+        self.decimation = 1
         self.sim.render_interval = self.decimation
         self.episode_length_s = 12.0
         self.viewer.eye = (2.5, 2.5, 1.5)

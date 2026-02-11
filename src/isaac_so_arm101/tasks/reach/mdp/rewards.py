@@ -21,7 +21,7 @@ from isaaclab.utils.math import combine_frame_transforms
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
 
-
+#是否抬起物体
 def object_is_lifted(
     env: ManagerBasedRLEnv, minimal_height: float, object_cfg: SceneEntityCfg = SceneEntityCfg("object")
 ) -> torch.Tensor:
@@ -29,7 +29,7 @@ def object_is_lifted(
     object: RigidObject = env.scene[object_cfg.name]
     return torch.where(object.data.root_pos_w[:, 2] > minimal_height, 1.0, 0.0)
 
-
+#末端是否靠近物体
 def object_ee_distance(
     env: ManagerBasedRLEnv,
     std: float,
@@ -38,6 +38,7 @@ def object_ee_distance(
 ) -> torch.Tensor:
     """Reward the agent for reaching the object using tanh-kernel."""
     # extract the used quantities (to enable type-hinting)
+    #获取机械臂本体和机械臂末端
     object: RigidObject = env.scene[object_cfg.name]
     ee_frame: FrameTransformer = env.scene[ee_frame_cfg.name]
     # Target object position: (num_envs, 3)
@@ -49,7 +50,7 @@ def object_ee_distance(
 
     return 1 - torch.tanh(object_ee_distance / std)
 
-
+#是否把物体移动到目标
 def object_goal_distance(
     env: ManagerBasedRLEnv,
     std: float,
@@ -64,14 +65,17 @@ def object_goal_distance(
     object: RigidObject = env.scene[object_cfg.name]
     command = env.command_manager.get_command(command_name)
     # compute the desired position in the world frame
+    #获取目标点到base_link的位置
     des_pos_b = command[:, :3]
+    #将目标位置从机器人基座坐标系转到世界坐标系
+    #分别获取机器人的Position和Orientation
     des_pos_w, _ = combine_frame_transforms(robot.data.root_state_w[:, :3], robot.data.root_state_w[:, 3:7], des_pos_b)
     # distance of the end-effector to the object: (num_envs,)
     distance = torch.norm(des_pos_w - object.data.root_pos_w[:, :3], dim=1)
     # rewarded if the object is lifted above the threshold
     return (object.data.root_pos_w[:, 2] > minimal_height) * (1 - torch.tanh(distance / std))
 
-
+#靠近 + 抬起组合奖励
 def object_ee_distance_and_lifted(
     env: ManagerBasedRLEnv,
     std: float,
@@ -84,5 +88,9 @@ def object_ee_distance_and_lifted(
     reach_reward = object_ee_distance(env, std, object_cfg, ee_frame_cfg)
     # Get lifting reward
     lift_reward = object_is_lifted(env, minimal_height, object_cfg)
+    reward = reach_reward * lift_reward
+    reward = torch.clamp(reward, min=-1.0, max=1.0)
     # Combine rewards multiplicatively
+    print("reach_reward: ",reach_reward)
+    print("lift_reward: ",lift_reward)
     return reach_reward * lift_reward

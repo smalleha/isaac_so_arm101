@@ -33,7 +33,7 @@ gym.register(
     kwargs={
         # "env_cfg_entry_point": f"{__name__}.joint_pos_env_cfg:PiperReachEnvCfg",
         # "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:ReachPPORunnerCfg",
-        "env_cfg_entry_point":f"{__name__}.piper_joint_pos_env_cfg:PiperReachEnvCfg",
+        "env_cfg_entry_point":f"{__name__}.piper_joint_pos_env_cfg:Piper_ReachEnvCfg",
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:ReachPPORunnerCfg",
 
     },

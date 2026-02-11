@@ -46,6 +46,7 @@ def object_ee_distance(
     ee_w = ee_frame.data.target_pos_w[..., 0, :]
     # Distance of the end-effector to the object: (num_envs,)
     object_ee_distance = torch.norm(cube_pos_w - ee_w, dim=1)
+    print("torch.tanh(object_ee_distance / std): ",torch.tanh(object_ee_distance / std))
 
     return 1 - torch.tanh(object_ee_distance / std)
 
@@ -69,6 +70,7 @@ def object_goal_distance(
     # distance of the end-effector to the object: (num_envs,)
     distance = torch.norm(des_pos_w - object.data.root_pos_w[:, :3], dim=1)
     # rewarded if the object is lifted above the threshold
+    print ("(1 - torch.tanh(distance / std): ",(1 - torch.tanh(distance / std)))
     return (object.data.root_pos_w[:, 2] > minimal_height) * (1 - torch.tanh(distance / std))
 
 
@@ -85,4 +87,6 @@ def object_ee_distance_and_lifted(
     # Get lifting reward
     lift_reward = object_is_lifted(env, minimal_height, object_cfg)
     # Combine rewards multiplicatively
+    print("reach_reward: ",reach_reward)
+    print("lift_reward: ",lift_reward)
     return reach_reward * lift_reward
