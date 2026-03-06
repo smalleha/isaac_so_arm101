@@ -127,11 +127,11 @@ def compute_penalties(
     # 3. 关节角度限制惩罚
     robot: RigidObject = env.scene[robot_cfg.name]
     # 获取前6个关节的角度 (num_envs, 6)
-    joint_angles = robot.data.joint_pos[:, :7]
-    # 获取前7个关节的角度限制 (7, 2) -> (min, max)
-    joint_limits = robot.data.joint_limits[:7]
-    min_angles = joint_limits[:, 0].unsqueeze(0)  # (1, 7)
-    max_angles = joint_limits[:, 1].unsqueeze(0)  # (1, 7)
+    joint_angles = robot.data.joint_pos[:, :6]
+    # 获取前6个关节的角度限制 (6, 2) -> (min, max)
+    joint_limits = robot.data.joint_limits[:6]
+    min_angles = joint_limits[:, 0].unsqueeze(0)  # (1, 6)
+    max_angles = joint_limits[:, 1].unsqueeze(0)  # (1, 6)
     
     # 计算低于最小值的惩罚
     below_min = torch.clamp(min_angles - joint_angles, min=0.0)

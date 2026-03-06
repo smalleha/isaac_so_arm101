@@ -14,7 +14,7 @@ PIPER_CFG = ArticulationCfg(
     spawn=sim_utils.UrdfFileCfg(
         fix_base=True,
         replace_cylinders_with_capsules=True,
-        asset_path=f"{TEMPLATE_ASSETS_DATA_DIR}/urdf/piper_no_gripper_description_isaac.urdf",
+        asset_path=f"{TEMPLATE_ASSETS_DATA_DIR}/urdf/piper_description_v100_realsense_camera_v2_dark.urdf",
         activate_contact_sensors=False, # set as false while waiting for capsule implementation
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
@@ -38,6 +38,7 @@ PIPER_CFG = ArticulationCfg(
             "joint4": 0.0,
             "joint5": 0.0,
             "joint6": 0.0,
+            "piper_finger.*": 0.0
         },
         # Set initial joint velocities to zero
         joint_vel={".*": 0.0},
@@ -68,6 +69,14 @@ PIPER_CFG = ArticulationCfg(
                     "joint6": 8.0,
                 },
             ),
+        "gripper": ImplicitActuatorCfg(
+            joint_names_expr=["piper_finger.*"],
+            effort_limit_sim=2.5,  # Increased from 1.9 to 2.5 for stronger grip
+            velocity_limit_sim=1.5,
+            stiffness=60.0,  # Increased from 25.0 to 60.0 for more reliable closing
+            damping=20.0,  # Increased from 10.0 to 20.0 for stability
+        ),
+
         },
     soft_joint_pos_limit_factor=1.0,
 )

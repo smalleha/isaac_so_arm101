@@ -10,7 +10,7 @@ TEMPLATE_ASSETS_DATA_DIR = Path(__file__).resolve().parent
 # Configuration
 ##
 
-PIPER_CFG = ArticulationCfg(
+NERO_CFG = ArticulationCfg(
     spawn=sim_utils.UrdfFileCfg(
         fix_base=True,
         replace_cylinders_with_capsules=True,
@@ -51,25 +51,25 @@ PIPER_CFG = ArticulationCfg(
                 
                 # 刚度 (Stiffness)：针对轻型臂 Piper 优化，不再追求极致硬度
                 stiffness={
-                    "joint1": 200.0, 
-                    "joint2": 200.0,
-                    "joint3": 150.0,
-                    "joint4": 150.0,
-                    "joint5": 80.0,
-                    "joint6": 80.0,
-                    "joint7": 50.0,
+                    "joint1": 2000.0, 
+                    "joint2": 2000.0,
+                    "joint3": 1500.0,
+                    "joint4": 1500.0,
+                    "joint5": 800.0,
+                    "joint6": 800.0,
+                    "joint7": 500.0,
 
                 },
                 
                 # 阻尼 (Damping)：采用临界阻尼思路，比例设在 10% 左右
                 damping={
-                    "joint1": 40.0,
-                    "joint2": 40.0,
-                    "joint3": 30.0,
-                    "joint4": 15.0,
-                    "joint5": 8.0,
-                    "joint6": 8.0,
-                    "joint7": 5.0,
+                    "joint1": 400.0,
+                    "joint2": 400.0,
+                    "joint3": 300.0,
+                    "joint4": 150.0,
+                    "joint5": 80.0,
+                    "joint6": 80.0,
+                    "joint7": 50.0,
                 },
             ),
         },

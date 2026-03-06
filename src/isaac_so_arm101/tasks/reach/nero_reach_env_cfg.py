@@ -80,9 +80,9 @@ class CommandsCfg:
         ranges=mdp.UniformPoseCommandCfg.Ranges(
             pos_x=(0.3, 0.4),
             pos_y=(0.1, 0.15),
-            pos_z=(0.3, 0.3),
-            roll=(0.0, 0.0),
-            pitch=(90.0,90.0),
+            pos_z=(0.7, 0.7),
+            roll=(90.0, 90.0),
+            pitch=(0.0,0.0),
             yaw=(0.0, 0.0),
         ),
     )
@@ -140,7 +140,7 @@ class RewardsCfg:
         func=mdp.position_command_error_tanh, # 改用 tanh 或 exp
         weight=0.5, # 给一个显著的正权重
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=["link6"]), 
+            "asset_cfg": SceneEntityCfg("robot", body_names=["end_effector"]), 
             "std": 0.5, # 增大初始感知的半径，让它在半米外就能拿到分
             "command_name": "ee_pose"
         },
@@ -205,7 +205,7 @@ class CurriculumCfg:
 
 
 @configclass
-class PiperReachEnvCfg(ManagerBasedRLEnvCfg):
+class NeroReachEnvCfg(ManagerBasedRLEnvCfg):
     """Configuration for the reach end-effector pose tracking environment."""
 
     # Scene settings
