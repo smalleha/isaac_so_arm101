@@ -14,7 +14,7 @@ NERO_CFG = ArticulationCfg(
     spawn=sim_utils.UrdfFileCfg(
         fix_base=True,
         replace_cylinders_with_capsules=True,
-        asset_path=f"{TEMPLATE_ASSETS_DATA_DIR}/urdf/nero_description_stand_v2.urdf",
+        asset_path="/home/agilex/Isaac/IsaacLab/source/isaaclab_assets/isaaclab_assets/robots/nero_description/urdf/nero_description_stand_v2.urdf",
         activate_contact_sensors=False, # set as false while waiting for capsule implementation
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
@@ -22,8 +22,8 @@ NERO_CFG = ArticulationCfg(
         ),
         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
             enabled_self_collisions=True,
-            solver_position_iteration_count=24,
-            solver_velocity_iteration_count=3,
+            solver_position_iteration_count=8,
+            solver_velocity_iteration_count=0,
         ),
         joint_drive=sim_utils.UrdfConverterCfg.JointDriveCfg(
             gains=sim_utils.UrdfConverterCfg.JointDriveCfg.PDGainsCfg(stiffness=0, damping=0)
@@ -38,7 +38,7 @@ NERO_CFG = ArticulationCfg(
             "joint4": 0.0,
             "joint5": 0.0,
             "joint6": 0.0,
-            "joint7": 0.0
+            "joint7": 0.0,
         },
         # Set initial joint velocities to zero
         joint_vel={".*": 0.0},
@@ -46,30 +46,30 @@ NERO_CFG = ArticulationCfg(
     actuators={
             "arm": ImplicitActuatorCfg(
                 joint_names_expr=["joint.*"],
-                effort_limit=15.0, # 稍微限制出力，防止瞬间冲击
-                velocity_limit=10.0,
+                effort_limit=200.0, # 稍微限制出力，防止瞬间冲击
+                velocity_limit=1.5,
                 
-                # 刚度 (Stiffness)：针对轻型臂 Piper 优化，不再追求极致硬度
+                # 刚度 (Stiffness)：针对轻型臂 Nero 优化，不再追求极致硬度
                 stiffness={
-                    "joint1": 2000.0, 
-                    "joint2": 2000.0,
-                    "joint3": 1500.0,
-                    "joint4": 1500.0,
-                    "joint5": 800.0,
-                    "joint6": 800.0,
-                    "joint7": 500.0,
+                    "joint1": 800.0, 
+                    "joint2": 800.0,
+                    "joint3": 400.0,
+                    "joint4": 400.0,
+                    "joint5": 160.0,
+                    "joint6": 160.0,
+                    "joint7": 100.0,
 
                 },
                 
                 # 阻尼 (Damping)：采用临界阻尼思路，比例设在 10% 左右
                 damping={
-                    "joint1": 400.0,
-                    "joint2": 400.0,
-                    "joint3": 300.0,
-                    "joint4": 150.0,
-                    "joint5": 80.0,
-                    "joint6": 80.0,
-                    "joint7": 50.0,
+                    "joint1": 80.0,
+                    "joint2": 80.0,
+                    "joint3": 40.0,
+                    "joint4": 40.0,
+                    "joint5": 16.0,
+                    "joint6": 16.0,
+                    "joint7": 10.0,
                 },
             ),
         },

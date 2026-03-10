@@ -1,9 +1,4 @@
-# Copyright (c) 2024-2025, Muammer Bay (LycheeAI), Louis Le Lay
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-#
-# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
+# Copyright (c) 2022-2026, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -11,10 +6,11 @@
 from dataclasses import MISSING
 
 import isaaclab.sim as sim_utils
-
-# import mdp
-import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg
+from isaaclab.devices import DevicesCfg
+from isaaclab.devices.gamepad import Se3GamepadCfg
+from isaaclab.devices.keyboard import Se3KeyboardCfg
+from isaaclab.devices.spacemouse import Se3SpaceMouseCfg
 from isaaclab.envs import ManagerBasedRLEnvCfg
 from isaaclab.managers import ActionTermCfg as ActionTerm
 from isaaclab.managers import CurriculumTermCfg as CurrTerm
@@ -28,6 +24,8 @@ from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.utils.noise import AdditiveUniformNoiseCfg as Unoise
+
+import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
 
 ##
 # Scene definition
@@ -75,14 +73,14 @@ class CommandsCfg:
     ee_pose = mdp.UniformPoseCommandCfg(
         asset_name="robot",
         body_name=MISSING,
-        resampling_time_range=(5.0, 5.0),
+        resampling_time_range=(4.0, 4.0),
         debug_vis=True,
         ranges=mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(0.3, 0.4),
-            pos_y=(0.1, 0.15),
-            pos_z=(0.7, 0.7),
-            roll=(90.0, 90.0),
-            pitch=(0.0,0.0),
+            pos_x=(0.35, 0.45),
+            pos_y=(-0.1, 0.1),
+            pos_z=(0.4, 0.5),
+            roll=(0.0, 0.0),
+            pitch=(0.0, 0.0),  # depends on end-effector axis
             yaw=(0.0, 0.0),
         ),
     )
@@ -126,7 +124,7 @@ class EventCfg:
         func=mdp.reset_joints_by_scale,
         mode="reset",
         params={
-            "position_range": (0.0, 0.0),
+            "position_range": (0.5, 1.5),
             "velocity_range": (0.0, 0.0),
         },
     )
@@ -136,26 +134,15 @@ class EventCfg:
 class RewardsCfg:
     """Reward terms for the MDP."""
 
-    end_effector_position_tracking = RewTerm(
-        func=mdp.position_command_error_tanh, # 改用 tanh 或 exp
-        weight=0.5, # 给一个显著的正权重
-        params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=["end_effector"]), 
-            "std": 0.5, # 增大初始感知的半径，让它在半米外就能拿到分
-            "command_name": "ee_pose"
-        },
-    )
-
     # task terms
-    # end_effector_position_tracking = RewTerm(
-    #     func=mdp.position_command_error,
-    #     weight=-0.2,
-    #     params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
-    # )
-
+    end_effector_position_tracking = RewTerm(
+        func=mdp.position_command_error,
+        weight=-0.1,
+        params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
+    )
     end_effector_position_tracking_fine_grained = RewTerm(
         func=mdp.position_command_error_tanh,
-        weight=0.2,
+        weight=0.1,
         params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.1, "command_name": "ee_pose"},
     )
     end_effector_orientation_tracking = RewTerm(
@@ -163,20 +150,14 @@ class RewardsCfg:
         weight=-0.1,
         params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
     )
-    action_l2 = RewTerm(
-            func=mdp.action_l2, 
-            weight=-0.01,  # 对应你的 0.05 系数
-        )
 
     # action penalty
-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.001)
+    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.0001)
     joint_vel = RewTerm(
         func=mdp.joint_vel_l2,
-        weight=-0.001,
+        weight=-0.0001,
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
-
-
 
 
 @configclass
@@ -223,9 +204,26 @@ class NeroReachEnvCfg(ManagerBasedRLEnvCfg):
     def __post_init__(self):
         """Post initialization."""
         # general settings
-        self.decimation = 1
+        self.decimation = 2
         self.sim.render_interval = self.decimation
-        self.episode_length_s = 6.0
-        self.viewer.eye = (2.5, 2.5, 1.5)
+        self.episode_length_s = 12.0
+        self.viewer.eye = (3.5, 3.5, 3.5)
         # simulation settings
         self.sim.dt = 1.0 / 60.0
+
+        self.teleop_devices = DevicesCfg(
+            devices={
+                "keyboard": Se3KeyboardCfg(
+                    gripper_term=False,
+                    sim_device=self.sim.device,
+                ),
+                "gamepad": Se3GamepadCfg(
+                    gripper_term=False,
+                    sim_device=self.sim.device,
+                ),
+                "spacemouse": Se3SpaceMouseCfg(
+                    gripper_term=False,
+                    sim_device=self.sim.device,
+                ),
+            },
+        )

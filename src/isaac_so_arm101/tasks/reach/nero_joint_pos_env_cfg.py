@@ -15,6 +15,7 @@
 
 
 # import mdp
+import math
 
 import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
 from isaaclab.utils import configclass
@@ -35,10 +36,10 @@ class Nero_ReachEnvCfg(NeroReachEnvCfg):
         # switch robot to franka
         self.scene.robot = NERO_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
         # override rewards
-        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["end_effector"]
-        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["end_effector"]
-        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["end_effector"]
-        self.rewards.action_rate
+        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["world"]
+        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["world"]
+        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["world"]
+        # self.rewards.action_rate
         # TODO: reorient command target
 
         # override actions
@@ -50,9 +51,8 @@ class Nero_ReachEnvCfg(NeroReachEnvCfg):
         )
         # override command generator body
         # end-effector is along z-direction
-        self.commands.ee_pose.body_name = ["end_effector"]
-        # self.commands.link6.body_name = []
-        # self.commands.ee_pose.ranges.pitch = (math.pi, math.pi)
+        self.commands.ee_pose.body_name = "world"
+        self.commands.ee_pose.ranges.pitch = (math.pi, math.pi)
 
 
 @configclass
