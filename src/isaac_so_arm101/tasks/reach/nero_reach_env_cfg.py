@@ -76,11 +76,11 @@ class CommandsCfg:
         resampling_time_range=(4.0, 4.0),
         debug_vis=True,
         ranges=mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(0.35, 0.45),
+            pos_x=(0.4, 0.45),
             pos_y=(-0.1, 0.1),
             pos_z=(0.4, 0.5),
-            roll=(0.0, 0.0),
-            pitch=(0.0, 0.0),  # depends on end-effector axis
+            roll=(-1.57,-1.57),
+            pitch=(0.0,0.0),  # depends on end-effector axis
             yaw=(0.0, 0.0),
         ),
     )
@@ -124,7 +124,7 @@ class EventCfg:
         func=mdp.reset_joints_by_scale,
         mode="reset",
         params={
-            "position_range": (0.5, 1.5),
+            "position_range": (0.0, 0.0),
             "velocity_range": (0.0, 0.0),
         },
     )
@@ -137,17 +137,17 @@ class RewardsCfg:
     # task terms
     end_effector_position_tracking = RewTerm(
         func=mdp.position_command_error,
-        weight=-0.1,
+        weight=-2.0,
         params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
     )
     end_effector_position_tracking_fine_grained = RewTerm(
         func=mdp.position_command_error_tanh,
-        weight=0.1,
-        params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.1, "command_name": "ee_pose"},
+        weight=3.5,
+        params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.2, "command_name": "ee_pose"},
     )
     end_effector_orientation_tracking = RewTerm(
         func=mdp.orientation_command_error,
-        weight=-0.1,
+        weight=-0.05,
         params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
     )
 
@@ -158,7 +158,6 @@ class RewardsCfg:
         weight=-0.0001,
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
-
 
 @configclass
 class TerminationsCfg:

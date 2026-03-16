@@ -51,8 +51,8 @@ class Nero_ReachEnvCfg(NeroReachEnvCfg):
         )
         # override command generator body
         # end-effector is along z-direction
-        self.commands.ee_pose.body_name = "world"
-        self.commands.ee_pose.ranges.pitch = (math.pi, math.pi)
+        self.commands.ee_pose.body_name = "end_effector"
+        # self.commands.ee_pose.ranges.pitch = (math.pi, math.pi)
 
 
 @configclass

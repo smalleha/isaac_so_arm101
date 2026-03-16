@@ -51,25 +51,27 @@ NERO_CFG = ArticulationCfg(
                 
                 # 刚度 (Stiffness)：针对轻型臂 Nero 优化，不再追求极致硬度
                 stiffness={
-                    "joint1": 800.0, 
-                    "joint2": 800.0,
-                    "joint3": 400.0,
-                    "joint4": 400.0,
-                    "joint5": 160.0,
-                    "joint6": 160.0,
-                    "joint7": 100.0,
+                    "joint1": 200.0, 
+                    "joint2": 200.0,
+                    "joint3": 150.0,
+                    "joint4": 150.0,
+                    "joint5": 80.0,
+                    "joint6": 80.0,
+                    "joint7": 80.0,
+                    # "end_effector_joint": 100,
 
                 },
                 
                 # 阻尼 (Damping)：采用临界阻尼思路，比例设在 10% 左右
                 damping={
-                    "joint1": 80.0,
-                    "joint2": 80.0,
-                    "joint3": 40.0,
-                    "joint4": 40.0,
-                    "joint5": 16.0,
-                    "joint6": 16.0,
-                    "joint7": 10.0,
+                    "joint1": 20.0,
+                    "joint2": 20.0,
+                    "joint3": 15.0,
+                    "joint4": 15.0,
+                    "joint5": 8.0,
+                    "joint6": 8.0,
+                    "joint7": 8.0,
+                    # "end_effector_joint": 10.0,
                 },
             ),
         },
