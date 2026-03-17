@@ -36,9 +36,9 @@ class Nero_ReachEnvCfg(NeroReachEnvCfg):
         # switch robot to franka
         self.scene.robot = NERO_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
         # override rewards
-        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["world"]
-        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["world"]
-        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["world"]
+        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["end_effector"]
+        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["end_effector"]
+        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["end_effector"]
         # self.rewards.action_rate
         # TODO: reorient command target
 

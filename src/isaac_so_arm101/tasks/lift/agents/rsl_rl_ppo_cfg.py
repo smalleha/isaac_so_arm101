@@ -18,7 +18,7 @@ from isaaclab_rl.rsl_rl import (
 
 @configclass
 class LiftCubePPORunnerCfg(RslRlOnPolicyRunnerCfg):
-    num_steps_per_env = 24
+    num_steps_per_env = 128
     max_iterations = 1500
     save_interval = 50
     experiment_name = "lift"

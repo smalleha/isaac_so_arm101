@@ -49,14 +49,14 @@ def object_ee_distance(
     ee_w = ee_frame.data.target_pos_w[..., 0, :]
     # Distance of the end-effector to the object: (num_envs,)
     object_ee_distance = torch.norm(cube_pos_w - ee_w, dim=1)
-    print("torch.tanh(object_ee_distance / std): ",torch.tanh(object_ee_distance / std))
-    print(f"dist: {object_ee_distance}, std: {std}")
-    print(f"EE Position: {ee_frame.data.target_pos_w[:, 0]}") # 这里的 0 是 end_effector 的索引
-    print(f"Object Position: {object.data.root_pos_w}")
-    print(f"Base Position: {ee_frame.data.source_pos_w}")
-    print(f"EE Position: {ee_frame.data.target_pos_w}")
-    print("ee_frame.data.target_frame_names",ee_frame.data.target_frame_names)
-    print("ee_frame.data.target_pos_source",ee_frame.data.target_pos_source)
+    # print("torch.tanh(object_ee_distance / std): ",torch.tanh(object_ee_distance / std))
+    # print(f"dist: {object_ee_distance}, std: {std}")
+    # print(f"EE Position: {ee_frame.data.target_pos_w[:, 0]}") # 这里的 0 是 end_effector 的索引
+    # print(f"Object Position: {object.data.root_pos_w}")
+    # print(f"Base Position: {ee_frame.data.source_pos_w}")
+    # print(f"EE Position: {ee_frame.data.target_pos_w}")
+    # print("ee_frame.data.target_frame_names",ee_frame.data.target_frame_names)
+    # print("ee_frame.data.target_pos_source",ee_frame.data.target_pos_source)
     return 1 - torch.tanh(object_ee_distance / std)
 
 def object_goal_distance(
@@ -78,7 +78,7 @@ def object_goal_distance(
     # distance of the end-effector to the object: (num_envs,)
     distance = torch.norm(des_pos_w - object.data.root_pos_w[:, :3], dim=1)
     # rewarded if the object is lifted above the threshold
-    print ("(1 - torch.tanh(distance / std): ",(1 - torch.tanh(distance / std)))
+    # print ("(1 - torch.tanh(distance / std): ",(1 - torch.tanh(distance / std)))
     return (object.data.root_pos_w[:, 2] > minimal_height) * (1 - torch.tanh(distance / std))
 
 

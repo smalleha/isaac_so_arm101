@@ -46,7 +46,7 @@ NERO_CFG = ArticulationCfg(
     actuators={
             "arm": ImplicitActuatorCfg(
                 joint_names_expr=["joint.*"],
-                effort_limit=200.0, # 稍微限制出力，防止瞬间冲击
+                effort_limit=20.0, # 稍微限制出力，防止瞬间冲击
                 velocity_limit=1.5,
                 
                 # 刚度 (Stiffness)：针对轻型臂 Nero 优化，不再追求极致硬度

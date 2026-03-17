@@ -30,7 +30,7 @@ PIPER_CFG = ArticulationCfg(
         ),
     ),
     init_state=ArticulationCfg.InitialStateCfg(
-        rot=(0.0, 0.0, 0.0, 0.0),
+        rot=(1.0, 0.0, 0.0, 0.0),
         joint_pos={
             "joint1": 0.0,
             "joint2": 0.0,
@@ -38,7 +38,8 @@ PIPER_CFG = ArticulationCfg(
             "joint4": 0.0,
             "joint5": 0.0,
             "joint6": 0.0,
-            "piper_finger.*": 0.0
+            "piper_finger_joint7": 0.05,
+            "piper_finger_joint8": -0.05
         },
         # Set initial joint velocities to zero
         joint_vel={".*": 0.0},
@@ -46,7 +47,7 @@ PIPER_CFG = ArticulationCfg(
     actuators={
             "arm": ImplicitActuatorCfg(
                 joint_names_expr=["joint.*"],
-                effort_limit=15.0, # 稍微限制出力，防止瞬间冲击
+                effort_limit=30.0, # 稍微限制出力，防止瞬间冲击
                 velocity_limit=10.0,
                 
                 # 刚度 (Stiffness)：针对轻型臂 Piper 优化，不再追求极致硬度
@@ -55,8 +56,8 @@ PIPER_CFG = ArticulationCfg(
                     "joint2": 200.0,
                     "joint3": 150.0,
                     "joint4": 150.0,
-                    "joint5": 80.0,
-                    "joint6": 80.0,
+                    "joint5": 100.0,
+                    "joint6": 100.0,
                 },
                 
                 # 阻尼 (Damping)：采用临界阻尼思路，比例设在 10% 左右
@@ -65,13 +66,13 @@ PIPER_CFG = ArticulationCfg(
                     "joint2": 40.0,
                     "joint3": 30.0,
                     "joint4": 15.0,
-                    "joint5": 8.0,
-                    "joint6": 8.0,
+                    "joint5": 20.0,
+                    "joint6": 20.0,
                 },
             ),
         "gripper": ImplicitActuatorCfg(
-            joint_names_expr=["piper_finger.*"],
-            effort_limit_sim=2.5,  # Increased from 1.9 to 2.5 for stronger grip
+            joint_names_expr=["piper_finger_joint7","piper_finger_joint8"],
+            effort_limit_sim=25,  # Increased from 1.9 to 2.5 for stronger grip
             velocity_limit_sim=1.5,
             stiffness=60.0,  # Increased from 25.0 to 60.0 for more reliable closing
             damping=20.0,  # Increased from 10.0 to 20.0 for stability

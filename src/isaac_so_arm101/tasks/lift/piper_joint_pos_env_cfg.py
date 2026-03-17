@@ -44,12 +44,12 @@ class PiperLiftCubeEnvCfg(LiftEnvCfg):
         )
         self.actions.gripper_action = mdp.BinaryJointPositionActionCfg(
             asset_name="robot",
-            joint_names=["piper_finger.*"],
-            open_command_expr={"piper_finger.*": 0.0},
-            close_command_expr={"piper_finger.*": 0.05},
+            joint_names=["piper_finger_joint7","piper_finger_joint8"],
+            open_command_expr={"piper_finger_joint8": -0.05,"piper_finger_joint7": 0.05},
+            close_command_expr={"piper_finger_joint8": 0.0,"piper_finger_joint7": 0.0},
         )
         # Set the body name for the end effector
-        self.commands.object_pose.body_name = ["link6"]
+        self.commands.object_pose.body_name = ["piper_finger_8"]
 
         # Set Cube as object
         self.scene.object = RigidObjectCfg(
@@ -71,7 +71,7 @@ class PiperLiftCubeEnvCfg(LiftEnvCfg):
 
         # Listens to the required transforms
         marker_cfg = FRAME_MARKER_CFG.copy()
-        marker_cfg.markers["frame"].scale = (0.05, 0.05, 0.05)
+        marker_cfg.markers["frame"].scale = (0.03, 0.03, 0.03)
         marker_cfg.prim_path = "/Visuals/FrameTransformer"
         self.scene.ee_frame = FrameTransformerCfg(
             prim_path="{ENV_REGEX_NS}/Robot/arm_base",
@@ -82,7 +82,7 @@ class PiperLiftCubeEnvCfg(LiftEnvCfg):
                     prim_path="{ENV_REGEX_NS}/Robot/piper_finger_8",
                     name="end_effector",
                     offset=OffsetCfg(
-                        pos=[0.0, 0.0, 0.02],
+                        pos=[0.0, 0.0, 0.025],
                     ),
                 ),
             ],
