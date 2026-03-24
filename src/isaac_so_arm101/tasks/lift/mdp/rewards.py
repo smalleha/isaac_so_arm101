@@ -18,8 +18,6 @@ from isaaclab.managers import SceneEntityCfg
 from isaaclab.sensors import FrameTransformer
 from isaaclab.utils.math import combine_frame_transforms
 
-from isaac_so_arm101 import robots
-
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
 
@@ -42,22 +40,15 @@ def object_ee_distance(
     # extract the used quantities (to enable type-hinting)
     object: RigidObject = env.scene[object_cfg.name]
     ee_frame: FrameTransformer = env.scene[ee_frame_cfg.name]
-    
     # Target object position: (num_envs, 3)
     cube_pos_w = object.data.root_pos_w
     # End-effector position: (num_envs, 3)
     ee_w = ee_frame.data.target_pos_w[..., 0, :]
     # Distance of the end-effector to the object: (num_envs,)
     object_ee_distance = torch.norm(cube_pos_w - ee_w, dim=1)
-    # print("torch.tanh(object_ee_distance / std): ",torch.tanh(object_ee_distance / std))
-    # print(f"dist: {object_ee_distance}, std: {std}")
-    # print(f"EE Position: {ee_frame.data.target_pos_w[:, 0]}") # 这里的 0 是 end_effector 的索引
-    # print(f"Object Position: {object.data.root_pos_w}")
-    # print(f"Base Position: {ee_frame.data.source_pos_w}")
-    # print(f"EE Position: {ee_frame.data.target_pos_w}")
-    # print("ee_frame.data.target_frame_names",ee_frame.data.target_frame_names)
-    # print("ee_frame.data.target_pos_source",ee_frame.data.target_pos_source)
+
     return 1 - torch.tanh(object_ee_distance / std)
+
 
 def object_goal_distance(
     env: ManagerBasedRLEnv,
@@ -78,7 +69,6 @@ def object_goal_distance(
     # distance of the end-effector to the object: (num_envs,)
     distance = torch.norm(des_pos_w - object.data.root_pos_w[:, :3], dim=1)
     # rewarded if the object is lifted above the threshold
-    # print ("(1 - torch.tanh(distance / std): ",(1 - torch.tanh(distance / std)))
     return (object.data.root_pos_w[:, 2] > minimal_height) * (1 - torch.tanh(distance / std))
 
 
@@ -95,6 +85,4 @@ def object_ee_distance_and_lifted(
     # Get lifting reward
     lift_reward = object_is_lifted(env, minimal_height, object_cfg)
     # Combine rewards multiplicatively
-    print("reach_reward: ",reach_reward)
-    print("lift_reward: ",lift_reward)
     return reach_reward * lift_reward
