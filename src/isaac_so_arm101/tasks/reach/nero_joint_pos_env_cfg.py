@@ -36,9 +36,9 @@ class Nero_ReachEnvCfg(NeroReachEnvCfg):
         # switch robot to franka
         self.scene.robot = NERO_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
         # override rewards
-        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["end_effector"]
-        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["end_effector"]
-        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["end_effector"]
+        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["gripper_base"]
+        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["gripper_base"]
+        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["gripper_base"]
         # self.rewards.action_rate
         # TODO: reorient command target
 
@@ -51,7 +51,7 @@ class Nero_ReachEnvCfg(NeroReachEnvCfg):
         )
         # override command generator body
         # end-effector is along z-direction
-        self.commands.ee_pose.body_name = "end_effector"
+        self.commands.ee_pose.body_name = "gripper_base"
         # self.commands.ee_pose.ranges.pitch = (math.pi, math.pi)
 
 

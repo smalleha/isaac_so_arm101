@@ -18,10 +18,10 @@ from isaaclab_rl.rsl_rl import (
 
 @configclass
 class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
-    num_steps_per_env = 128
-    max_iterations = 1000
+    num_steps_per_env = 24
+    max_iterations = 550
     save_interval = 50
-    experiment_name = "reach"
+    experiment_name = "dual_nero_reach"
     run_name = ""
     resume = False
     empirical_normalization = False
@@ -38,7 +38,7 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         entropy_coef=0.001,
         num_learning_epochs=8,
         num_mini_batches=4,
-        learning_rate=1.0e-3,
+        learning_rate=1.0e-2,
         schedule="adaptive",
         gamma=0.99,
         lam=0.95,

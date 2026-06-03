@@ -1,3 +1,4 @@
+
 # Copyright (c) 2024-2025, Muammer Bay (LycheeAI), Louis Le Lay
 # All rights reserved.
 #
@@ -12,3 +13,4 @@ from .trs_so100.so_arm100 import *
 from .trs_so101.so_arm101 import *
 from .piper_description.piper import *
 from .nero_description.nero import *
+from .dual_nero.dual_nero import *

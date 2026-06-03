@@ -54,6 +54,17 @@ gym.register(
     disable_env_checker=True,
 )
 
+gym.register(
+    id="Isaac-Dual-Nero-Reach-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    kwargs={
+        "env_cfg_entry_point":f"{__name__}.dual_nero_joint_pos_env_cfg:Dual_Nero_ReachEnvCfg",
+        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:ReachPPORunnerCfg",
+        "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_cfg.yaml",
+
+    },
+    disable_env_checker=True,
+)
 
 gym.register(
     id="Isaac-SO-ARM100-Reach-Play-v0",

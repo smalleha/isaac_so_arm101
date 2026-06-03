@@ -43,13 +43,21 @@ def main():
     # count of environments
     index = 0
     # acquire all Isaac environments names
+    # for task_spec in gym.registry.values():
+    #     if "SO-ARM" in task_spec.id:
+    #         # add details to table
+    #         table.add_row([index + 1, task_spec.id, task_spec.entry_point, task_spec.kwargs["env_cfg_entry_point"]])
+    #         # increment count
+    #         index += 1
     for task_spec in gym.registry.values():
-        if "SO-ARM" in task_spec.id:
-            # add details to table
-            table.add_row([index + 1, task_spec.id, task_spec.entry_point, task_spec.kwargs["env_cfg_entry_point"]])
-            # increment count
+        if any(name in task_spec.id for name in ["SO-ARM", "Nero", "Piper"]):
+            table.add_row([
+                index + 1,
+                task_spec.id,
+                task_spec.entry_point,
+                task_spec.kwargs["env_cfg_entry_point"]
+            ])
             index += 1
-
     print(table)
 
 

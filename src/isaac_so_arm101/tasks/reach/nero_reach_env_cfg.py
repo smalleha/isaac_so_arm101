@@ -79,8 +79,8 @@ class CommandsCfg:
             pos_x=(0.4, 0.45),
             pos_y=(-0.1, 0.1),
             pos_z=(0.4, 0.5),
-            roll=(-1.57,-1.57),
-            pitch=(0.0,0.0),  # depends on end-effector axis
+            roll=(0.0,0.0),
+            pitch=(1.57,1.57),  # depends on end-effector axis
             yaw=(0.0, 0.0),
         ),
     )
